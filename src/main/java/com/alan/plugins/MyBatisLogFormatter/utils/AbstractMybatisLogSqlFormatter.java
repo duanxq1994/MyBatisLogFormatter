@@ -1,9 +1,10 @@
 package com.alan.plugins.MyBatisLogFormatter.utils;
 
-import org.apache.commons.lang3.StringUtils;
-
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 抽象 SQL 格式化器基类
@@ -12,7 +13,7 @@ public abstract class AbstractMybatisLogSqlFormatter {
 
     protected static final String PREPARING_KEY = "Preparing: ";
     protected static final String PARAMETERS_KEY = "Parameters: ";
-    protected static final String SQL_PLACEHOLDER = "#占位符";
+    protected static final String SQL_PLACEHOLDER = "?";
 
     /**
      * 格式化 MyBatis 日志
@@ -29,8 +30,6 @@ public abstract class AbstractMybatisLogSqlFormatter {
         }
         if (StringUtils.isNotBlank(parameters)) {
             parameters = parameters.replace(PARAMETERS_KEY, "");
-            // 替换？占位符
-            sql = sql.replace("?", SQL_PLACEHOLDER);
             // 匹配参数并替换
             sql = replaceParameters(sql, parameters);
         }
@@ -92,23 +91,30 @@ public abstract class AbstractMybatisLogSqlFormatter {
 
     /**
      * 替换 SQL 中的参数占位符
-     * 参考 Python 代码逻辑：
      * - 使用正则表达式匹配参数：value(type) 格式
-     * - 参考 Python: re.sub("(?P<value>.*)\((?P<type>\w+)\)", group1, p)
-     * - Python 使用贪婪匹配 .* 来匹配值部分，这样可以处理值中包含括号的情况
      *   例如：Best Area(New)(String) 应该匹配为 value="Best Area(New)", type="String"
      */
     protected String replaceParameters(String sql, String parameters) {
         if (StringUtils.isBlank(parameters)) {
             return sql;
         }
-        
-        // 参考 Python 代码：param.split(", ")
-        // 使用正则表达式分割参数，处理逗号前后的空格
+        // 遍历每个子项 如果不是以 null 或者 (\w+) 结尾，和下一个拼接
         String[] paramArray = parameters.split(", ");
-        
-        // 匹配参数格式：value(type)，参考 Python: (.*)\((\w+)\)
-        // Python 使用贪婪匹配 .* 来匹配值部分，这样可以处理值中包含括号的情况
+        for (int i = 0; i < paramArray.length; i++) {
+            String param = paramArray[i];
+            if (param.endsWith("null")
+                || param.matches(".*\\(\\w+\\)$")
+                || i >= paramArray.length-1) {
+                continue;
+            }
+            paramArray[i+1] = param + ", " + paramArray[i+1];
+            paramArray[i] = "";
+        }
+        paramArray = Arrays.stream(paramArray)
+            .filter(StringUtils::isNotBlank)
+            .toArray(String[]::new);
+
+        // 匹配参数格式：value(type)，(.*)\((\w+)\)
         // 例如：Best Area(New)(String) 应该匹配为 value="Best Area(New)", type="String"
         // 使用贪婪匹配 .* 而不是非贪婪匹配 .*?，贪婪匹配会自动匹配到最后一个 (type)
         Pattern paramPattern = Pattern.compile("(.*)\\((\\w+)\\)");
@@ -139,10 +145,7 @@ public abstract class AbstractMybatisLogSqlFormatter {
                 sql = sql.replaceFirst(Pattern.quote(SQL_PLACEHOLDER), Matcher.quoteReplacement(formattedValue));
             } else {
                 // 如果没有匹配到格式，可能是空字符串或其他格式
-                // 参考 Python 代码中对空字符串的处理
-                if (param.isEmpty()) {
-                    sql = sql.replaceFirst(Pattern.quote(SQL_PLACEHOLDER), "''");
-                }
+                sql = sql.replaceFirst(Pattern.quote(SQL_PLACEHOLDER), formatString(param));
             }
         }
         return sql;

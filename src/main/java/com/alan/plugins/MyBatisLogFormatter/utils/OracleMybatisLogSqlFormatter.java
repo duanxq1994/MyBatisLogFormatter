@@ -9,10 +9,6 @@ public class OracleMybatisLogSqlFormatter extends AbstractMybatisLogSqlFormatter
 
     @Override
     protected String formatParameterValue(String value, String type) {
-        if (StringUtils.isBlank(value)) {
-            return "null";
-        }
-
         switch (type.toLowerCase()) {
             case "timestamp":
                 // Oracle 时间戳需要使用 to_timestamp 函数
