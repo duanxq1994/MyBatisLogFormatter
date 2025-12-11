@@ -38,8 +38,12 @@ public class OpenQueryConsoleActionHandler {
             NotificationHelper.showErrorNotification(project, I18nBundle.message("label.DataSourceManager.notFond"));
             return;
         }
-//        // 如果只有一个数据源，直接使用；如果有多个，提示用户选择
         List<LocalDataSource> dataSources = dataSourceManager.getDataSources();
+        if (dataSources.isEmpty()) {
+            NotificationHelper.showErrorNotification(project, I18nBundle.message("label.dataSource.noDataSources"));
+            return;
+        }
+        // 如果只有一个数据源，直接使用；如果有多个，提示用户选择
         LocalDataSource selectedDataSource = null;
         if (dataSources.size() == 1) {
             selectedDataSource = dataSources.get(0);
