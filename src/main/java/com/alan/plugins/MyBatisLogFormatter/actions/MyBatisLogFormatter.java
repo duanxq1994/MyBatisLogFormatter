@@ -14,6 +14,7 @@ public class MyBatisLogFormatter extends AnAction {
         // 获得选中的文本
         String selectedText = e.getRequiredData(CommonDataKeys.EDITOR).getSelectionModel().getSelectedText();
         if (StringUtils.isNotBlank(selectedText)) {
+            // 使用配置中的默认数据库类型
             Utils.copy(SqlUtils.formatMybatisLog(selectedText));
         }
     }

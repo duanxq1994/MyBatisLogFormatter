@@ -21,49 +21,7 @@ import java.util.List;
  */
 public class OpenQueryConsoleActionHandler {
 
-    public static void openQueryConsoleWithClipboardSql(Project project, String sqlContent) {
-        if (project == null) {
-            NotificationHelper.showErrorNotification(null, I18nBundle.message("label.project.not.found"));
-            return;
-        }
-        // 获取 DatabaseView 实例
-        DatabaseView databaseView = DatabaseView.getDatabaseView(project);
-        if (databaseView == null) {
-            NotificationHelper.showErrorNotification(project, I18nBundle.message("label.notFound.database.plugin"));
-            return;
-        }
-
-        DataSourceManager<LocalDataSource> dataSourceManager = DataSourceManager.byDataSource(project, LocalDataSource.class);
-        if (dataSourceManager == null) {
-            NotificationHelper.showErrorNotification(project, I18nBundle.message("label.DataSourceManager.notFond"));
-            return;
-        }
-        List<LocalDataSource> dataSources = dataSourceManager.getDataSources();
-        if (dataSources.isEmpty()) {
-            NotificationHelper.showErrorNotification(project, I18nBundle.message("label.dataSource.noDataSources"));
-            return;
-        }
-        // 如果只有一个数据源，直接使用；如果有多个，提示用户选择
-        LocalDataSource selectedDataSource = null;
-        if (dataSources.size() == 1) {
-            selectedDataSource = dataSources.get(0);
-        } else {
-            String[] dataSourceNames = dataSources.stream().map(LocalDataSource::getName).toArray(String[]::new);
-            int selectedIndex = Messages.showChooseDialog(
-                    I18nBundle.message("label.select.dataSource"),
-                    I18nBundle.message("label.open.queryConsole"),
-                    dataSourceNames,
-                    dataSourceNames[0],
-                    Messages.getQuestionIcon()
-            );
-            if (selectedIndex != -1) {
-                selectedDataSource = dataSources.get(selectedIndex);
-            }
-        }
-        if (selectedDataSource == null) {
-            // 未选择数据源，操作取消
-            return;
-        }
+    public static void openQueryConsoleWithClipboardSql(Project project, LocalDataSource selectedDataSource, String sqlContent) {
         // 打开 Query Console
         try {
             VirtualFile file = DatabaseEditorHelper.createNewConsoleVirtualFile(selectedDataSource);

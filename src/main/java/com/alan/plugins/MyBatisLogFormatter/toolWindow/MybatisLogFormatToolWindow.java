@@ -1,7 +1,9 @@
 package com.alan.plugins.MyBatisLogFormatter.toolWindow;
 
 import com.alan.plugins.MyBatisLogFormatter.component.DataListComponent;
+import com.alan.plugins.MyBatisLogFormatter.config.MyBatisLogFormatterSettings;
 import com.alan.plugins.MyBatisLogFormatter.i18n.I18nBundle;
+import com.alan.plugins.MyBatisLogFormatter.utils.DatabaseType;
 import com.alan.plugins.MyBatisLogFormatter.utils.SqlUtils;
 import com.alan.plugins.MyBatisLogFormatter.utils.Utils;
 import com.intellij.DynamicBundle;
@@ -27,6 +29,7 @@ public class MybatisLogFormatToolWindow {
 //    private JBTabsImpl jbTabs;
     private final JBTabbedPane jbTabbedPane = new JBTabbedPane();
     private DataListComponent formatResultDataListComponent;
+    private JComboBox<DatabaseType> databaseTypeComboBox;
 //    Locale locale = DynamicBundle.getLocale();
 //    String language = locale.getLanguage();
 
@@ -77,6 +80,33 @@ public class MybatisLogFormatToolWindow {
 
         formatTabPanel.add(textPanel, 0);
 
+        // 数据库类型选择区域
+        JPanel dbTypePanel = new JPanel();
+        dbTypePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        dbTypePanel.setPreferredSize(new Dimension(Short.MAX_VALUE, 30));
+        dbTypePanel.setMaximumSize(new Dimension(Short.MAX_VALUE, 30));
+        JLabel dbTypeLabel = new JLabel("数据库类型:");
+        // 从 DatabaseType 枚举获取所有可用的数据库类型，便于后续扩展
+        DatabaseType[] databaseTypes = DatabaseType.values();
+        databaseTypeComboBox = new JComboBox<>(databaseTypes);
+        databaseTypeComboBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                                                          boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof DatabaseType) {
+                    setText(((DatabaseType) value).getName());
+                }
+                return this;
+            }
+        });
+        // 使用配置中的默认数据库类型
+        DatabaseType defaultType = MyBatisLogFormatterSettings.getInstance().getDefaultDatabaseType();
+        databaseTypeComboBox.setSelectedItem(defaultType);
+        dbTypePanel.add(dbTypeLabel);
+        dbTypePanel.add(databaseTypeComboBox);
+        formatTabPanel.add(dbTypePanel);
+
         // 按钮区域
         JPanel btnPanel = new JPanel();
         btnPanel.setPreferredSize(new Dimension(Short.MAX_VALUE, 40));
@@ -86,7 +116,13 @@ public class MybatisLogFormatToolWindow {
         formatBtn.addActionListener(e -> {
             String text = formatText.getText();
             if (StringUtils.isNotBlank(text)) {
-                String sql = SqlUtils.formatMybatisLog(text);
+                // 获取选中的数据库类型
+                DatabaseType selectedDbType = (DatabaseType) databaseTypeComboBox.getSelectedItem();
+                if (selectedDbType == null) {
+                    // 如果未选择，使用配置中的默认数据库类型
+                    selectedDbType = MyBatisLogFormatterSettings.getInstance().getDefaultDatabaseType();
+                }
+                String sql = SqlUtils.formatMybatisLog(text, selectedDbType);
                 if (StringUtils.isNotBlank(sql)) {
                     Utils.copy(sql);
                     appendLog(sql);
