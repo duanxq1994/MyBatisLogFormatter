@@ -1,6 +1,5 @@
 package com.alan.plugins.MyBatisLogFormatter.utils;
 
-import com.alan.plugins.MyBatisLogFormatter.config.MyBatisLogFormatterSettings;
 import com.intellij.database.dataSource.LocalDataSource;
 
 /**
@@ -11,10 +10,9 @@ public class DataSourceUtils {
     /**
      * 从 LocalDataSource 获取数据库类型
      */
-    public static DatabaseType getDatabaseType(LocalDataSource dataSource) {
+    public static DatabaseType getDatabaseType(LocalDataSource dataSource, DatabaseType defaultDatabaseType) {
         if (dataSource == null) {
-            // 使用配置中的默认数据库类型
-            return MyBatisLogFormatterSettings.getInstance().getDefaultDatabaseType();
+            return defaultDatabaseType;
         }
         
         try {
@@ -54,9 +52,7 @@ public class DataSourceUtils {
         } catch (Exception e) {
             // 忽略异常
         }
-        
-        // 使用配置中的默认数据库类型
-        return MyBatisLogFormatterSettings.getInstance().getDefaultDatabaseType();
+        return defaultDatabaseType;
     }
 }
 

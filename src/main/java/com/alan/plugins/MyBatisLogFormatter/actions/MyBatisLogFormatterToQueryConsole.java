@@ -1,5 +1,6 @@
 package com.alan.plugins.MyBatisLogFormatter.actions;
 
+import com.alan.plugins.MyBatisLogFormatter.config.MyBatisLogFormatterSettings;
 import com.alan.plugins.MyBatisLogFormatter.handler.OpenQueryConsoleActionHandler;
 import com.alan.plugins.MyBatisLogFormatter.i18n.I18nBundle;
 import com.alan.plugins.MyBatisLogFormatter.notice.NotificationHelper;
@@ -41,7 +42,9 @@ public class MyBatisLogFormatterToQueryConsole extends AnAction {
         if (selectedDataSource == null) {
             return;
         }
-        DatabaseType databaseType = DataSourceUtils.getDatabaseType(selectedDataSource);
+        // 使用配置中的默认数据库类型
+        final DatabaseType defaultDatabaseType = MyBatisLogFormatterSettings.getInstance().getDefaultDatabaseType();
+        DatabaseType databaseType = DataSourceUtils.getDatabaseType(selectedDataSource, defaultDatabaseType);
         String sqlContent = SqlUtils.formatMybatisLog(selectedText, databaseType);
         
         if (StringUtils.isBlank(sqlContent)) {

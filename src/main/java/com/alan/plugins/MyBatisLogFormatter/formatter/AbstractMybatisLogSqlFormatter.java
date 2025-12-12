@@ -1,4 +1,4 @@
-package com.alan.plugins.MyBatisLogFormatter.utils;
+package com.alan.plugins.MyBatisLogFormatter.formatter;
 
 import java.util.Arrays;
 import java.util.regex.Matcher;

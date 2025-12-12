@@ -1,4 +1,4 @@
-package com.alan.plugins.MyBatisLogFormatter.utils;
+package com.alan.plugins.MyBatisLogFormatter.formatter;
 
 /**
  * MySQL SQL 格式化器

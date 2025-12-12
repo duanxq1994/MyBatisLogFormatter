@@ -1,5 +1,7 @@
 package com.alan.plugins.MyBatisLogFormatter.actions;
 
+import com.alan.plugins.MyBatisLogFormatter.config.MyBatisLogFormatterSettings;
+import com.alan.plugins.MyBatisLogFormatter.utils.DatabaseType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -15,7 +17,9 @@ public class MyBatisLogFormatter extends AnAction {
         String selectedText = e.getRequiredData(CommonDataKeys.EDITOR).getSelectionModel().getSelectedText();
         if (StringUtils.isNotBlank(selectedText)) {
             // 使用配置中的默认数据库类型
-            Utils.copy(SqlUtils.formatMybatisLog(selectedText));
+            final DatabaseType defaultDatabaseType = MyBatisLogFormatterSettings.getInstance()
+                .getDefaultDatabaseType();
+            Utils.copy(SqlUtils.formatMybatisLog(selectedText, defaultDatabaseType));
         }
     }
 }

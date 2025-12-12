@@ -1,6 +1,7 @@
 package com.alan.plugins.MyBatisLogFormatter.utils;
 
-import com.alan.plugins.MyBatisLogFormatter.config.MyBatisLogFormatterSettings;
+import com.alan.plugins.MyBatisLogFormatter.formatter.AbstractMybatisLogSqlFormatter;
+import com.alan.plugins.MyBatisLogFormatter.formatter.SqlFormatterFactory;
 import com.github.vertical_blank.sqlformatter.SqlFormatter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -11,14 +12,13 @@ import org.apache.commons.lang3.StringUtils;
 public class SqlUtils {
 
     /**
-     * 格式化 MyBatis 日志（使用配置中的默认数据库类型）
-     * @param mybatisLog MyBatis 日志
-     * @return 格式化后的 SQL
-     */
-    public static String formatMybatisLog(String mybatisLog) {
-        DatabaseType defaultType = MyBatisLogFormatterSettings.getInstance().getDefaultDatabaseType();
-        return formatMybatisLog(mybatisLog, defaultType);
-    }
+         * 格式化 MyBatis 日志（根据数据库类型）
+         * @param mybatisLog MyBatis 日志
+         * @return 格式化后的 SQL
+         */
+        public static String formatMybatisLog(String mybatisLog) {
+            return formatMybatisLog(mybatisLog, null);
+        }
 
     /**
      * 格式化 MyBatis 日志（根据数据库类型）

@@ -1,6 +1,4 @@
-package com.alan.plugins.MyBatisLogFormatter.utils;
-
-import org.apache.commons.lang3.StringUtils;
+package com.alan.plugins.MyBatisLogFormatter.formatter;
 
 /**
  * Oracle SQL 格式化器
