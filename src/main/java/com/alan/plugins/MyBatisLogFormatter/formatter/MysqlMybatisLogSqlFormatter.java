@@ -8,19 +8,13 @@ public class MysqlMybatisLogSqlFormatter extends AbstractMybatisLogSqlFormatter 
     @Override
     protected String formatParameterValue(String value, String type) {
         switch (type.toLowerCase()) {
-            case "boolean":
-                return formatBoolean(value);
-            case "integer":
-            case "int":
-            case "long":
-            case "float":
-            case "double":
-            case "bigdecimal":
-                return value;
-            case "string":
-            case "char", "date", "localdatetime", "localdate", "timestamp":
-            default:
+            case "string", "char":
+            case "date", "time", "localdatetime", "localdate", "timestamp":
                 return formatString(value);
+            default:
+                // 数字
+                // 复杂类型。比如 ByteArrayInputStream
+                return value;
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.alan.plugins.MyBatisLogFormatter.formatter;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -98,20 +99,22 @@ public abstract class AbstractMybatisLogSqlFormatter {
         if (StringUtils.isBlank(parameters)) {
             return sql;
         }
-        // 遍历每个子项 如果不是以 null 或者 (\w+) 结尾，和下一个拼接
         String[] paramArray = parameters.split(", ");
+        // 处理字符串中', '的特殊情况
         for (int i = 0; i < paramArray.length; i++) {
             String param = paramArray[i];
-            if (param.endsWith("null")
+            // 遍历每个子项 如果不是 null 或者 以(\w+) 结尾，证明该项和下一项是一个字符串拆分出来的两部分。和下一个拼接
+            if ("null".equals(param)
                 || param.matches(".*\\(\\w+\\)$")
                 || i >= paramArray.length-1) {
                 continue;
             }
+            // 和下一个拼接
             paramArray[i+1] = param + ", " + paramArray[i+1];
-            paramArray[i] = "";
+            paramArray[i] = null;
         }
         paramArray = Arrays.stream(paramArray)
-            .filter(StringUtils::isNotBlank)
+            .filter(Objects::nonNull)
             .toArray(String[]::new);
 
         // 匹配参数格式：value(type)，(.*)\((\w+)\)

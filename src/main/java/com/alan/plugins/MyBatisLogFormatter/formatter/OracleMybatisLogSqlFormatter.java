@@ -8,29 +8,20 @@ public class OracleMybatisLogSqlFormatter extends AbstractMybatisLogSqlFormatter
     @Override
     protected String formatParameterValue(String value, String type) {
         switch (type.toLowerCase()) {
-            case "timestamp":
-                // Oracle 时间戳需要使用 to_timestamp 函数
+            case "time", "localtime":
+                return String.format("to_date('1970-01-01 %s', 'yyyy-MM-dd HH24:MI:ss')", value);
+            case "timestamp", "localdatetime": // Oracle 时间戳需要使用 to_timestamp 函数
                 return String.format("to_timestamp('%s', 'yyyy-MM-dd HH24:MI:ss.ff')", value);
-            case "date":
-                // Oracle 日期需要使用 to_date 函数
-                return String.format("to_date('%s', 'yyyy-MM-dd HH24:MI:ss')", value);
-            case "localdatetime":
-            case "localdate":
-                // LocalDateTime 和 LocalDate 也使用 to_date
-                return String.format("to_date('%s', 'yyyy-MM-dd HH24:MI:ss')", value);
+            case "date", "localdate": // Oracle 日期需要使用 to_date 函数
+                return String.format("to_date('%s', 'yyyy-MM-dd')", value);
             case "boolean":
                 return formatBoolean(value);
-            case "integer":
-            case "int":
-            case "long":
-            case "float":
-            case "double":
-            case "bigdecimal":
-                return value;
-            case "string":
-            case "char":
-            default:
+            case "string", "char":
                 return formatString(value);
+            default:
+                // 数字
+                // 复杂类型。比如 ByteArrayInputStream
+                return value;
         }
     }
 }
