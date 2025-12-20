@@ -58,7 +58,7 @@ public class MyBatisLogFormatterToQueryConsole extends AnAction {
                             project,
                             selectedDataSource,
                             selectedNamespace,
-                            SqlUtils.beautifySql(sqlContent)
+                            sqlContent
                     );
                 })
         );
