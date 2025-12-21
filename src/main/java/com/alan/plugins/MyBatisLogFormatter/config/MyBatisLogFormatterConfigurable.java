@@ -1,5 +1,6 @@
 package com.alan.plugins.MyBatisLogFormatter.config;
 
+import com.alan.plugins.MyBatisLogFormatter.i18n.I18nBundle;
 import com.alan.plugins.MyBatisLogFormatter.utils.DatabaseType;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
@@ -34,7 +35,7 @@ public class MyBatisLogFormatterConfigurable implements Configurable {
 
         // 数据库类型选择
         JPanel dbTypePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel dbTypeLabel = new JLabel("默认数据库类型:");
+        JLabel dbTypeLabel = new JLabel(I18nBundle.message("label.database.type.default"));
         DatabaseType[] databaseTypes = DatabaseType.values();
         databaseTypeComboBox = new JComboBox<>(databaseTypes);
         databaseTypeComboBox.setRenderer(new DefaultListCellRenderer() {

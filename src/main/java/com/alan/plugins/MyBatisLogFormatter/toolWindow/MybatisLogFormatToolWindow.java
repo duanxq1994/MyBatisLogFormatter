@@ -84,7 +84,7 @@ public class MybatisLogFormatToolWindow {
         dbTypePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         dbTypePanel.setPreferredSize(new Dimension(Short.MAX_VALUE, 30));
         dbTypePanel.setMaximumSize(new Dimension(Short.MAX_VALUE, 30));
-        JLabel dbTypeLabel = new JLabel("数据库类型:");
+        JLabel dbTypeLabel = new JLabel(I18nBundle.message("label.database.type"));
         // 从 DatabaseType 枚举获取所有可用的数据库类型，便于后续扩展
         DatabaseType[] databaseTypes = DatabaseType.values();
         databaseTypeComboBox = new JComboBox<>(databaseTypes);

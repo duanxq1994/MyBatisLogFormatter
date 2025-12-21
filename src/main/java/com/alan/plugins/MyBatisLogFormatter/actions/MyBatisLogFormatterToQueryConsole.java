@@ -123,7 +123,7 @@ public class MyBatisLogFormatterToQueryConsole extends AnAction {
                 DasNamespace root = dataSource.getModel().getCurrentRootNamespace();
                 onChosen.accept(root);
             } catch (Exception ex) {
-                NotificationHelper.showErrorNotification(project, "Failed to get namespace: " + e.getMessage());
+                NotificationHelper.showErrorNotification(project, I18nBundle.message("label.error.get.namespace.failed") + " " + e.getMessage());
             }
         }
     }

@@ -37,7 +37,7 @@ public class OpenQueryConsoleActionHandler {
         // 打开 Query Console
         try {
             if (selectedDataSource == null) {
-                NotificationHelper.showErrorNotification(project, I18nBundle.message("label.open.queryConsole.error") + "\n" + "DataSource is null");
+                NotificationHelper.showErrorNotification(project, I18nBundle.message("label.open.queryConsole.error") + "\n" + I18nBundle.message("label.error.dataSource.is.null"));
                 return;
             }
 
