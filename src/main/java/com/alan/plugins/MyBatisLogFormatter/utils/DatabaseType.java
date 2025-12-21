@@ -7,8 +7,16 @@ import org.jetbrains.annotations.Nullable;
  * 数据库类型枚举
  */
 public enum DatabaseType {
-    MYSQL("MySQL", new String[]{"MYSQL"}, new String[]{"MYSQL"}, new String[]{"MYSQL"}),
-    ORACLE("Oracle", new String[]{"ORACLE"}, new String[]{"ORACLE"}, new String[]{"ORACLE"});
+    MYSQL("MySQL", new String[]{"MYSQL"}, new String[]{"mysql", "jdbc:mysql"}, new String[]{"com.mysql", "mysql"}),
+    ORACLE("Oracle", new String[]{"ORACLE"}, new String[]{"oracle", "jdbc:oracle"}, new String[]{"oracle.jdbc", "oracle"}),
+    POSTGRESQL("PostgreSQL", new String[]{"POSTGRESQL", "POSTGRES"}, new String[]{"postgresql", "postgres", "jdbc:postgresql"}, new String[]{"org.postgresql", "postgresql"}),
+    SQL_SERVER("SQL Server", new String[]{"SQLSERVER", "SQL_SERVER", "MSSQL"}, new String[]{"sqlserver", "mssql", "jdbc:sqlserver", "jdbc:microsoft"}, new String[]{"com.microsoft.sqlserver", "sqlserver"}),
+    MONGODB("MongoDB", new String[]{"MONGODB", "MONGO"}, new String[]{"mongodb", "mongo"}, new String[]{"mongodb", "com.mongodb"}),
+    SQLITE("SQLite", new String[]{"SQLITE"}, new String[]{"sqlite", "jdbc:sqlite"}, new String[]{"org.sqlite", "sqlite"}),
+    H2("H2", new String[]{"H2"}, new String[]{"h2", "jdbc:h2"}, new String[]{"org.h2", "h2"}),
+    MARIADB("MariaDB", new String[]{"MARIADB"}, new String[]{"mariadb", "jdbc:mariadb"}, new String[]{"org.mariadb", "mariadb"}),
+    DB2("DB2", new String[]{"DB2"}, new String[]{"db2", "jdbc:db2"}, new String[]{"com.ibm.db2", "db2"}),
+    HSQLDB("HSQLDB", new String[]{"HSQLDB", "HSQL"}, new String[]{"hsqldb", "jdbc:hsqldb"}, new String[]{"org.hsqldb", "hsqldb"});
 
     /**
      * 默认数据库类型
