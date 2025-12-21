@@ -3,6 +3,7 @@ package com.alan.plugins.MyBatisLogFormatter.toolWindow;
 import com.alan.plugins.MyBatisLogFormatter.component.DataListComponent;
 import com.alan.plugins.MyBatisLogFormatter.config.MyBatisLogFormatterSettings;
 import com.alan.plugins.MyBatisLogFormatter.i18n.I18nBundle;
+import com.alan.plugins.MyBatisLogFormatter.notice.NotificationHelper;
 import com.alan.plugins.MyBatisLogFormatter.utils.DatabaseType;
 import com.alan.plugins.MyBatisLogFormatter.utils.SqlUtils;
 import com.alan.plugins.MyBatisLogFormatter.utils.Utils;
@@ -116,6 +117,11 @@ public class MybatisLogFormatToolWindow {
         formatBtn.addActionListener(e -> {
             String text = formatText.getText();
             if (StringUtils.isNotBlank(text)) {
+                // 提前检测文本是否包含 MyBatis 日志关键字
+                if (!SqlUtils.containsMybatisLog(text)) {
+                    NotificationHelper.showWarningNotification(project, I18nBundle.message("label.notice.not.sql.statement"));
+                    return;
+                }
                 // 获取选中的数据库类型
                 DatabaseType selectedDbType = (DatabaseType) databaseTypeComboBox.getSelectedItem();
                 if (selectedDbType == null) {

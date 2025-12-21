@@ -12,8 +12,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public abstract class AbstractMybatisLogSqlFormatter {
 
-    protected static final String PREPARING_KEY = "Preparing: ";
-    protected static final String PARAMETERS_KEY = "Parameters: ";
+    public static final String PREPARING_KEY = "Preparing: ";
+    public static final String PARAMETERS_KEY = "Parameters: ";
     protected static final String SQL_PLACEHOLDER = "?";
 
     /**
