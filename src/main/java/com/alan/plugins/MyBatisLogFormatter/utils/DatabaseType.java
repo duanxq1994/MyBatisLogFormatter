@@ -48,7 +48,7 @@ public enum DatabaseType {
         }
         String upperText = text.toUpperCase();
         for (String keyword : keywords) {
-            if (upperText.contains(keyword)) {
+            if (upperText.contains(keyword.toUpperCase())) {
                 return true;
             }
         }
