@@ -43,13 +43,13 @@ public class MyBatisLogFormatterConfigurable implements Configurable {
                                                           boolean isSelected, boolean cellHasFocus) {
                 super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 if (value instanceof DatabaseType) {
-                    setText(((DatabaseType) value).getName());
+                    setText(((DatabaseType) value).getDisplayName());
                 }
                 return this;
             }
         });
         // 安全地获取默认数据库类型
-        DatabaseType defaultType = DatabaseType.MYSQL;
+        DatabaseType defaultType = DatabaseType.DEFAULT_DATABASE_TYPE;
         if (settings != null) {
             defaultType = settings.getDefaultDatabaseType();
         }

@@ -57,8 +57,8 @@ public class MyBatisLogFormatterToQueryConsole extends AnAction {
         chooseDataSource(event, project, selectedDataSource ->
                 chooseNamespace(event, project, selectedDataSource, selectedNamespace -> {
                     // 使用配置中的默认数据库类型
-                    final DatabaseType defaultDatabaseType = MyBatisLogFormatterSettings.getInstance().getDefaultDatabaseType();
-                    DatabaseType databaseType = DataSourceUtils.getDatabaseType(selectedDataSource, defaultDatabaseType);
+                    DatabaseType defaultDatabaseType = MyBatisLogFormatterSettings.getInstance().getDefaultDatabaseType();
+                    DatabaseType databaseType = DatabaseType.fromDataSource(selectedDataSource, defaultDatabaseType);
                     String sqlContent = SqlUtils.formatMybatisLog(selectedText, databaseType);
 
                     if (StringUtils.isBlank(sqlContent)) {

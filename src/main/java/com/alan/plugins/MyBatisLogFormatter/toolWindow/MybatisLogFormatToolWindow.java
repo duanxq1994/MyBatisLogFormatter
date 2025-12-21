@@ -7,7 +7,6 @@ import com.alan.plugins.MyBatisLogFormatter.notice.NotificationHelper;
 import com.alan.plugins.MyBatisLogFormatter.utils.DatabaseType;
 import com.alan.plugins.MyBatisLogFormatter.utils.SqlUtils;
 import com.alan.plugins.MyBatisLogFormatter.utils.Utils;
-import com.intellij.DynamicBundle;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.ui.JBColor;
@@ -21,7 +20,6 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.util.Locale;
 
 public class MybatisLogFormatToolWindow {
     private final JPanel contentPanel = new JPanel();
@@ -96,7 +94,7 @@ public class MybatisLogFormatToolWindow {
                                                           boolean isSelected, boolean cellHasFocus) {
                 super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 if (value instanceof DatabaseType) {
-                    setText(((DatabaseType) value).getName());
+                    setText(((DatabaseType) value).getDisplayName());
                 }
                 return this;
             }
@@ -124,10 +122,6 @@ public class MybatisLogFormatToolWindow {
                 }
                 // 获取选中的数据库类型
                 DatabaseType selectedDbType = (DatabaseType) databaseTypeComboBox.getSelectedItem();
-                if (selectedDbType == null) {
-                    // 如果未选择，使用配置中的默认数据库类型
-                    selectedDbType = MyBatisLogFormatterSettings.getInstance().getDefaultDatabaseType();
-                }
                 String sql = SqlUtils.formatMybatisLog(text, selectedDbType);
                 if (StringUtils.isNotBlank(sql)) {
                     Utils.copy(sql);

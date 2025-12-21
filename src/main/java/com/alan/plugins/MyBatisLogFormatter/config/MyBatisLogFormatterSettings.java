@@ -25,12 +25,12 @@ public class MyBatisLogFormatterSettings implements PersistentStateComponent<MyB
      */
     public DatabaseType getDefaultDatabaseType() {
         if (myState.defaultDatabaseTypeName == null || myState.defaultDatabaseTypeName.isEmpty()) {
-            return DatabaseType.MYSQL; // 默认 MySQL
+            return DatabaseType.DEFAULT_DATABASE_TYPE;
         }
         try {
             return DatabaseType.valueOf(myState.defaultDatabaseTypeName);
         } catch (IllegalArgumentException e) {
-            return DatabaseType.MYSQL; // 默认 MySQL
+            return DatabaseType.DEFAULT_DATABASE_TYPE;
         }
     }
 
@@ -41,7 +41,7 @@ public class MyBatisLogFormatterSettings implements PersistentStateComponent<MyB
         if (databaseType != null) {
             myState.defaultDatabaseTypeName = databaseType.name();
         } else {
-            myState.defaultDatabaseTypeName = DatabaseType.MYSQL.name();
+            myState.defaultDatabaseTypeName = DatabaseType.DEFAULT_DATABASE_TYPE.name();
         }
     }
 
@@ -59,7 +59,7 @@ public class MyBatisLogFormatterSettings implements PersistentStateComponent<MyB
      * 状态类
      */
     public static class State {
-        public String defaultDatabaseTypeName = DatabaseType.MYSQL.name();
+        public String defaultDatabaseTypeName = DatabaseType.DEFAULT_DATABASE_TYPE.name();
     }
 }
 
