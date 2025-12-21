@@ -72,7 +72,9 @@ public class DataSourceUtils {
     public static List<DasNamespace> getAvailableNamespaces(LocalDataSource dataSource) {
         Set<DasNamespace> namespaces = new HashSet<>();
         DasNamespace dasNamespace = dataSource.getModel().getCurrentRootNamespace();
-        namespaces.add(dasNamespace);
+        if (dasNamespace != null) {
+            namespaces.add(dasNamespace);
+        }
         for (DasObject modelRoot : dataSource.getModel().getModelRoots()) {
             if (modelRoot instanceof BasicElement && modelRoot instanceof DasNamespace) {
                 boolean introspected = dataSource.getSchemaMapping().isIntrospected((BasicElement) modelRoot);

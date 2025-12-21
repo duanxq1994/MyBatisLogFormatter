@@ -19,6 +19,7 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.codeStyle.CodeStyleManager;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Alan
@@ -32,24 +33,14 @@ public class OpenQueryConsoleActionHandler {
      * @param namespace 命名空间（schema），如果为 null 则使用默认的 root namespace
      * @param sqlContent SQL 内容
      */
-    public static void openQueryConsoleWithClipboardSql(Project project, LocalDataSource selectedDataSource, DasNamespace namespace, String sqlContent) {
+    public static void openQueryConsoleWithClipboardSql(Project project, LocalDataSource selectedDataSource, @Nullable DasNamespace namespace, String sqlContent) {
         // 打开 Query Console
         try {
             if (selectedDataSource == null) {
                 NotificationHelper.showErrorNotification(project, I18nBundle.message("label.open.queryConsole.error") + "\n" + "DataSource is null");
                 return;
             }
-            
-            // 如果 namespace 为 null，尝试获取默认的 root namespace
-            if (namespace == null) {
-                try {
-                    namespace = selectedDataSource.getModel().getCurrentRootNamespace();
-                } catch (Exception e) {
-                    NotificationHelper.showErrorNotification(project, I18nBundle.message("label.open.queryConsole.error") + "\n" + "Failed to get namespace: " + e.getMessage());
-                    return;
-                }
-            }
-            
+
             VirtualFile file = DatabaseEditorHelper.createNewConsoleVirtualFile(selectedDataSource);
             if (file != null) {
                 DatabaseEditorHelper.openConsoleForFile(project, selectedDataSource, namespace, file);

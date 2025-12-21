@@ -95,12 +95,7 @@ public class MyBatisLogFormatterToQueryConsole extends AnAction {
             }
 
             if (namespaces.isEmpty()) {
-                DasNamespace root = dataSource.getModel().getCurrentRootNamespace();
-                if (root != null) {
-                    onChosen.accept(root);
-                    return;
-                }
-                NotificationHelper.showErrorNotification(project, "No schema/namespace found.");
+                onChosen.accept(null);
                 return;
             }
 
@@ -126,9 +121,7 @@ public class MyBatisLogFormatterToQueryConsole extends AnAction {
             // 如果获取失败，尝试返回默认的 root namespace
             try {
                 DasNamespace root = dataSource.getModel().getCurrentRootNamespace();
-                if (root != null) {
-                    onChosen.accept(root);
-                }
+                onChosen.accept(root);
             } catch (Exception ex) {
                 NotificationHelper.showErrorNotification(project, "Failed to get namespace: " + e.getMessage());
             }
